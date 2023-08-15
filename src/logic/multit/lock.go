@@ -22,3 +22,13 @@ func Pool() {
 	get := p.Get()
 	fmt.Println(get)
 }
+
+func SyncMap() *sync.Map {
+	smap := sync.Map{}
+	smap.Store("twj", 111)
+	load, ok := smap.Load("twj")
+	if !ok {
+		println(load)
+	}
+	return &smap
+}
