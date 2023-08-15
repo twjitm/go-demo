@@ -92,7 +92,7 @@ func (list *LinkList) remove(node *Node) {
 type Cache struct {
 	sync.Mutex
 	keys map[string]*Node
-	list LinkList
+	list *LinkList
 }
 
 func NewLRUCache(capacity int64) *Cache {
@@ -100,7 +100,7 @@ func NewLRUCache(capacity int64) *Cache {
 	return &Cache{
 		Mutex: sync.Mutex{},
 		keys:  map[string]*Node{},
-		list:  LinkList{capacity: capacity},
+		list:  &LinkList{capacity: capacity},
 	}
 }
 
@@ -115,7 +115,8 @@ func (cache *Cache) Get(key string) any {
 	return node.value
 }
 func (cache *Cache) Add(key string, value int) {
-
+	cache.Lock()
+	defer cache.Unlock()
 	node, ok := cache.keys[key]
 	if ok {
 		node.value = value
@@ -127,9 +128,12 @@ func (cache *Cache) Add(key string, value int) {
 	cache.list.add(node)
 }
 func (cache *Cache) Remove(key string) {
+	cache.Lock()
+	defer cache.Unlock()
 	node, ok := cache.keys[key]
 	if !ok {
 		return
 	}
 	cache.list.remove(node)
+	delete(cache.keys, key)
 }
