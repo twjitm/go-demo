@@ -6,13 +6,7 @@ import (
 )
 
 func TestPrice(t *testing.T) {
-	var slices []int64
-	slices = append(slices, 7)
-	slices = append(slices, 1)
-	slices = append(slices, 3)
-	slices = append(slices, 5)
-	slices = append(slices, 3)
-	slices = append(slices, 6)
+	var slices = []int64{1, 2, 3, 4, 5}
 	v := getMaxPrice(slices)
 	fmt.Println(v)
 
